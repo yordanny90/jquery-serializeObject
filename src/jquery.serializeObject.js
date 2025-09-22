@@ -162,40 +162,44 @@
         });
         return arr;
     };
+
+    var default_json_name='__dataJSON__';
+
     /**
      * Transfiere los datos de un FormData a un archivo JSON.<br>
      * Los archivos y los datos convertidos en un JSON se transfieren al nuevo FormData
      * @param {FormData} fdata Objeto FormData de donde se leen los datos
-     * @param {null|string} json_name Default: 'data.json'. Nombre del archivo al que se agrega el JSON con todos los datos
+     * @param {null|string} name Default: `'__dataJSON__'`. Nombre (input) con el que se envía el archivo JSON con todos los datos.
      * @returns {null|FormData} Nuevo FormData
      */
-    var formData_intoJSONFile=function(fdata, json_name){
+    var formData_intoJSONFile=function(fdata, name){
         if(!(fdata instanceof FormData)) return null;
-        if(json_name==null || (json_name=String(json_name))==='') json_name='data.json';
+        if(name==null || (name=String(name))==='') name=default_json_name;
         var fd=formData_fromArray(formData_getFiles(fdata));
         var data=JSON.stringify(formData_getObject(fdata));
         var json_file=new File([data], 'data.json', {type: "text/json"});
-        fd.append(json_name, json_file);
+        fd.append(name, json_file);
         return fd;
     };
     /**
      * Transfiere los datos de un FormData a un input JSON.<br>
      * Los archivos y los datos convertidos en un JSON se transfieren al nuevo FormData
      * @param {FormData} fdata Objeto FormData de donde se leen los datos
-     * @param {null|string} name Default: 'data.json'. Nombre del input al que se agrega el JSON con todos los datos
+     * @param {null|string} name Default: `'__dataJSON__'`. Nombre del input al que se agrega el JSON con todos los datos
      * @returns {null|FormData} Nuevo FormData
      */
     var formData_intoJSON=function(fdata, name){
         if(!(fdata instanceof FormData)) return null;
-        if(name==null || (name=String(name))==='') name='data.json';
+        if(name==null || (name=String(name))==='') name=default_json_name;
         var fd=formData_fromArray(formData_getFiles(fdata));
         var data=JSON.stringify(formData_getObject(fdata));
         fd.append(name, data);
         return fd;
     };
     /**
-     * Genera una FormData a aprtir de un array de datos
-     * @param {[]|{}} arr La estructura debe ser: ```[
+     * Genera una FormData a partir de un array de datos
+     * @param {[]|{}} arr La estructura debe ser: ```
+     * [
      *  {
      *      "name":"a",
      *      "value":"a"
